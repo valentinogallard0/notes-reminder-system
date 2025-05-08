@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+
+  notes-service:
+    build: ./notes-service
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - auth-service
+
+  reminder-service:
+    build: ./reminder-service
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - notes-service
+
+  search-service:
+    build: ./search-service
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - notes-service
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - auth-service
+      - notes-service
+      - reminder-service
+      - search-service
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - api-gateway
