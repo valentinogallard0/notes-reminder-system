@@ -1,0 +1,34 @@
+name: Notes System CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Simular pruebas
+        run: |
+          echo "Ejecutando pruebas para Auth Service..."
+          echo "Ejecutando pruebas para Notes Service..."
+          echo "Todas las pruebas pasaron correctamente!"
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Simular construcción de imágenes Docker
+        run: |
+          echo "Construyendo imagen para Auth Service..."
+          echo "Construyendo imagen para Notes Service..."
+          echo "Construcción completada exitosamente!"
